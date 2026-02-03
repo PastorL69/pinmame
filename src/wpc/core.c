@@ -3750,7 +3750,7 @@ UINT8* core_dmd_update_identify(const core_tLCDLayout* layout, unsigned int * ra
   case CORE_DMD_PWM_COMBINER_SUM_4: // Sum of the last 4 frames (Alvin G. for Pistol Poker & Mystery Castle)
     {
       assert((dmd_state->width & 7) == 0);
-      static const UINT8 level[5] = { 0, 3, 7, 11, 15 }; // brightness mapping 0,25,50,75,100% (backward compatible to encode 5 levels on 4 bits)
+      static const UINT8 level[5] = { 0, 3, 7, 11, 15 }; // !brightness mapping 0,25,50,75,100% (backward compatible to encode 5 levels on 4 bits)
       UINT8* rawData = dmd_state->tempRawFrame;
       const UINT8* const frame0 = dmd_state->rawFrames + ((dmd_state->nextFrame + (dmd_state->nFrames - 1)) % dmd_state->nFrames) * dmd_state->rawFrameSize;
       const UINT8* const frame1 = dmd_state->rawFrames + ((dmd_state->nextFrame + (dmd_state->nFrames - 2)) % dmd_state->nFrames) * dmd_state->rawFrameSize;
