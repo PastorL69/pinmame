@@ -3706,8 +3706,15 @@ UINT8* core_dmd_update_identify(const core_tLCDLayout* layout, unsigned int * ra
       const UINT8* const frame1 = dmd_state->rawFrames + ((dmd_state->nextFrame + (dmd_state->nFrames - 2)) % dmd_state->nFrames) * dmd_state->rawFrameSize;
       const UINT8* const frame2 = dmd_state->rawFrames + ((dmd_state->nextFrame + (dmd_state->nFrames - 3)) % dmd_state->nFrames) * dmd_state->rawFrameSize;
       for (int kk = 0; kk < dmd_state->rawFrameSize; kk++) {
-        const unsigned int intens1 = (frame0[kk] & 0x55) + (frame1[kk] & 0x55) + (frame2[kk] & 0x55); // 0x55 = 01010101 binary mask
-        const unsigned int intens2 = (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa) + (frame2[kk] & 0xaa); // 0xaa = 10101010 binary mask
+		const unsigned int intens1;
+		const unsigned int intens2;
+		if (dmd_state->raw_combiner == CORE_DMD_PWM_COMBINER_SUM_2_1) {
+			intens1 = 2*(frame0[kk] & 0x55) + (frame1[kk] & 0x55);   // 0x55 = 01010101 binary mask
+	        intens2 =   (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa)/2; // 0xaa = 10101010 binary mask
+		else {
+			intens1 = (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa)/2; // 0xaa = 10101010 binary mask
+	        intens2 = 2*(frame0[kk] & 0x55) + (frame1[kk] & 0x55);   // 0x55 = 01010101 binary mask
+		}
         *rawData++ =  intens1       & 0x03;
         *rawData++ = (intens2 >> 1) & 0x03;
         *rawData++ = (intens1 >> 2) & 0x03;
