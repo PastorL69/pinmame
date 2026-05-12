@@ -3739,9 +3739,9 @@ UINT8* core_dmd_update_identify(const core_tLCDLayout* layout, unsigned int * ra
         if (dmd_state->raw_combiner == CORE_DMD_PWM_COMBINER_SUM_2_1) {
           intens1 = 2*(frame0[kk] & 0x55) + (frame1[kk] & 0x55);   // 0x55 = 01010101 binary mask
           intens2 =   (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa)/2; // 0xaa = 10101010 binary mask
-        } else {
-          intens2 = 2*(frame0[kk] & 0x55) + (frame1[kk] & 0x55);   // 0x55 = 01010101 binary mask
-          intens1 =   (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa)/2; // 0xaa = 10101010 binary mask
+        } else { //if (dmd_state->raw_combiner == CORE_DMD_PWM_COMBINER_SUM_1_2)
+          intens1 =   (frame0[kk] & 0x55) + 2*(frame1[kk] & 0x55); // 0x55 = 01010101 binary mask
+          intens2 =   (frame0[kk] & 0xaa) + (frame1[kk] & 0xaa)/2; // 0xaa = 10101010 binary mask
         }
         *rawData++ = (intens2 >> 6) & 0x03;
         *rawData++ = (intens1 >> 6) & 0x03;
